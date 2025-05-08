@@ -5,13 +5,15 @@ import MainLayout from './layouts/MainLayout';
 import Marketing from './pages/Marketing';
 import Sales from './pages/Sales';
 import Support from './pages/Support';
+import SlidingLogin from './pages/auth/SlidingLogin';
 
 function App() {
   return (
     <Router>
       <MainLayout>
         <Routes>
-          <Route path="/" element={<Dashboard />} />
+          <Route path="/" element={<SlidingLogin />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/marketing" element={<Marketing />} />
           <Route path="/sales" element={<Sales />} />
           <Route path="/support" element={<Support />} />

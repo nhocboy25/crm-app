@@ -1,0 +1,428 @@
+/*
+
+- animation and layout from AsmrProg https://www.youtube.com/watch?v=PlpM2LJWu-s
+- RHF and zod implementation from Ian Lenehan https://www.youtube.com/watch?v=4oCH5WaJHzk
+
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;700&display=swap');
+
+:root {
+  --gradient-modified: linear-gradient(
+    130deg,
+    var(--blue),
+    var(--purple),
+    var(--purple),
+    var(--blue)
+  );
+  --rounded-top: 6rem 6rem 2rem 2rem;
+  --rounded-bottom: 2rem 2rem 6rem 6rem;
+  --rounded-left: 6rem 2rem 2rem 6rem;
+  --rounded-right: 2rem 6rem 6rem 2rem;
+}
+
+* {
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+button {
+  background-color: var(--purple);
+  color: white;
+  font-family: "Ubuntu", sans-serif;
+  font-size: 0.75rem;
+  padding: 0.5rem 3rem;
+  border: solid 1px transparent;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+
+  &:hover {
+    background-image: var(--gradient-dark);
+  }
+
+  &.toggle-button {
+    background-color: transparent;
+    border-color: white;
+
+    &:hover {
+      background-image: none;
+      border-color: var(--green);
+      color: var(--green);
+    }
+  }
+}
+
+a {
+  color: var(--text);
+  margin: 0;
+  
+  &:hover {
+    color: var(--purple);
+    text-decoration: none;
+  }
+
+  &.forgot-password {
+    margin-top: 1rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+  }
+}
+
+main {
+  background-color: white;
+  border-radius: 2rem;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+  width: calc(100vw - 4rem);
+  height: calc(100vh - 4rem);
+  
+  @media(min-width: 768px) {
+    width: 768px;
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+  
+  p {
+    letter-spacing: 0.3px;
+  }
+  
+  h1 {
+    font-family: "Lobster Two", cursive;
+    font-size: 3rem;
+    line-height: 1;
+  }
+  
+  h2 {
+    font-family: "Ubuntu", sans-serif;
+    font-size: 1.5rem;
+    line-height: 1;
+    letter-spacing: -0.1rem;
+  }
+  
+  span {
+    font-size: 0.75rem;
+  }
+  
+  .social-icons {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.25rem;
+    width: 100%;
+    padding: 1rem 0;
+
+    button {
+      border: none;
+      border-radius: 20%;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      padding: 0;
+      width: 2rem;
+      height: 2rem;
+
+      &:hover {
+        background-image: var(--gradient-dark);
+      }
+    }
+  }
+  
+  /* form container */
+  
+  section.form-container {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transition: all 0.6s ease-in-out;
+    background-color: white;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    
+    @media(min-width: 768px) {
+      top: 0;
+      width: 100%;
+      height: 100%;
+    }
+    
+    &.login {
+      top: 0;
+      height: 50%;
+      width: 100%;
+      z-index: 1;
+      opacity: 0;
+      transition: opacity 0.2s ease, transform 0.6 ease;
+      
+      @media(min-width: 768px) {
+        left: 0;
+        height: 100%;
+        width: 50%;
+      }
+    }
+    
+    &.create {
+      top: 0;
+      height: 100%;
+      height: 50%;
+      width: 100%;
+      z-index: 2;
+      opacity: 1;
+      transition: opacity 0.2s ease, transform 0.6 ease;
+      
+      @media(min-width: 768px) {
+        left: 0;
+        height: 100%;
+        width: 50%;
+      }
+    }
+    
+    form {
+      position: relative;
+      background-color: white;
+      display: flex;
+      flex-flow: column nowrap;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      width: 100%;
+
+      input {
+        background-color: #eeeeee;
+        border: none;
+        padding: 0.5rem 1rem;
+        font-family: "Ubuntu", sans-serif;
+        font-size: 0.75rem;
+        border-radius: 0.5rem;
+        width: 15rem;
+        box-sizing: border-box;
+
+        &:focus {
+          outline-color: var(--purple);
+        }
+
+        &:-webkit-autofill,
+        &:-webkit-autofill:hover,
+        &:-webkit-autofill:focus {
+          -webkit-box-shadow: 0 0 0px 1000px #eeeeee inset !important; /* prevents Chrome changing field colour on autocomplete */
+        }
+      }
+      
+      .error {
+        position: absolute;
+        bottom: 0;
+        height: 0.75rem;
+        width: 15rem;
+        color: red;
+        text-align: center;
+      }
+    }
+  }
+  
+  /* toggle container */
+
+  section.toggle-container {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    overflow: hidden;
+    transition: all 0.6s ease-in-out;
+    border-radius: var(--rounded-top);
+    z-index: 10;
+    
+    @media(min-width: 768px) {
+      top: 0;
+      left: 50%;
+      width: 50%;
+      height: 100%;
+      border-radius: var(--rounded-left);
+    }
+    
+    .toggle {
+      background-color: var(--purple);
+      background-image: var(--gradient-modified);
+      color: white;
+      position: relative;
+      top: -100%;
+      left: 0;
+      width: 100%;
+      height: 200%;
+      transform: translateY(0);
+      transition: all 0.6s ease-in-out;
+      
+      @media (min-width: 768px) {
+        top: 0;
+        left: -100%;
+        width: 200%;
+        height: 100%;
+        transform: translateX(0);
+      }
+      
+      .toggle-panel {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 50%;
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: center;
+        align-items: center;
+        gap: 1.2rem;
+        padding: 0 2rem;
+        text-align: center;
+        transform: translateY(0);
+        transition: transform 0.6s ease-in-out;
+        
+        @media (min-width: 768px) {
+          top: 0;
+          width: 50%;
+          height: 100%;
+          transform: translateX(0);
+        }
+        
+        &.toggle-create {
+          transform: translateY(-200%);
+          
+          @media(min-width: 768px) {
+            transform: translateX(-200%);
+          }
+        }
+        
+        &.toggle-login {
+          top: auto;
+          bottom: 0;
+          left: 0;
+          right: auto;
+          transform: translateY(0);
+          
+          @media (min-width: 768px) {
+            top: 0;
+            bottom: auto;
+            left: auto;
+            right: 0;
+            transform: translateX(0);
+          }
+        }
+      }
+    }
+  }
+  
+  /* when .active... */
+  &.active {
+    section.form-container {      
+      &.login {
+        transform: translateY(100%);
+        opacity: 1;
+        transition: opacity 0.2s ease, transform 0.6 ease;
+        z-index: 3;
+        border: none;
+        
+        @media (min-width: 768px) {
+          transform: translateX(100%);
+        }
+      }
+
+      &.create {
+        transform: translateY(100%);
+        opacity: 0;
+        transition: opacity 0.2s ease, transform 0.6 ease;
+        z-index: 1;
+        
+        @media (min-width: 768px) {
+          transform: translateX(100%);
+        }
+      }
+    }
+    
+    section.toggle-container {
+      transform: translateY(-100%);
+      border-radius: var(--rounded-bottom);
+      
+      @media (min-width: 768px) {
+        transform: translateX(-100%);
+        border-radius: var(--rounded-right);
+      }
+      
+      .toggle {
+        transform: translateY(50%);
+        
+        @media(min-width: 768px) {
+          transform: translateX(50%);
+        }
+        
+        .toggle-create {
+          transform: translateY(0);
+          
+          @media(min-width: 768px) {
+            transform: translateX(0);
+          }
+        }
+        
+        .toggle-login {
+          transform: translateY(200%);
+          
+          @media(min-width: 768px) {
+            transform: translateX(200%);
+          }
+        }
+      }
+    }
+  }
+}
+
+section.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(0,0,0,0.5);
+  height: 100%;
+  width: 100vw;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+  pointer-events: none;
+  z-index: 998;
+  
+  &.show {
+    opacity: 1;
+    pointer-events: visible;
+  }
+}
+
+section.modal {
+  display: grid;
+  place-items: center;
+  gap: 1rem;
+  margin: 1rem;
+  padding: 2rem;
+  background-color: white;
+  width: fit-content;
+  aspect-ratio: 16 / 9;
+  z-index: 999;
+  border-radius: 1rem;
+  box-shadow: var(--shadow);
+  opacity: 0;
+  transform: translateY(-100px);
+  transition: all 0.3s ease-in-out;
+  pointer-events: none;
+  aspect-ratio: 16 / 9;
+  font-family: 'Ubuntu', sans-serif;
+  text-align: center;
+  
+  &.show {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: visible;
+  }
+}
