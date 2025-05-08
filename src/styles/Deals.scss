@@ -1,0 +1,77 @@
+.deals {
+    padding: 20px;
+  
+    .deals-header {
+      margin-bottom: 20px;
+  
+      h1 {
+        font-size: 2rem;
+        margin: 0;
+      }
+    }
+  
+    .deals-content {
+      .deals-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+  
+        th, td {
+          border: 1px solid #ddd;
+          padding: 10px;
+          text-align: left;
+          background-color: white; /* White background for table cells */
+          color: black; /* Black text color */
+        }
+  
+        th {
+          background-color: #f4f4f4;
+          font-weight: bold;
+        }
+  
+        tr:nth-child(even) {
+          background-color: #f9f9f9;
+        }
+  
+        tr:hover {
+          background-color: #f1f1f1;
+        }
+  
+        td {
+          white-space: nowrap;
+        }
+      }
+    }
+  
+    .search-bar {
+      margin-top: 10px;
+      padding: 10px;
+      width: 100%;
+      max-width: 400px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+      background-color: #f9f9f9;
+      color: black;
+    }
+  
+    .deals-table input,
+    .deals-table select {
+      width: 100%;
+      padding: 5px;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+      font-size: 0.9rem;
+      background-color: white; /* White background for inputs */
+      color: black; /* Black text color for inputs */
+    }
+  
+    .deals-table input[type="date"] {
+      font-family: inherit;
+    }
+  
+    .deals-table select {
+      background-color: white;
+      color: black;
+    }
+  }

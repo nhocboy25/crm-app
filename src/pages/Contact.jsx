@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../styles/Contact.scss';
 
 const Contact = () => {
   // Sample customer data
-  const customers = [
+  const [customers, setCustomers] = useState([
     {
       id: 1,
       name: 'John Doe',
@@ -34,13 +34,47 @@ const Contact = () => {
       createDate: '2023-03-05',
       status: 'Active',
     },
-  ];
+  ]);
+
+  // State for search input and filtered customers
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredCustomers, setFilteredCustomers] = useState(customers);
+
+  // Handle search input change
+  const handleSearch = (e) => {
+    const value = e.target.value.toLowerCase();
+    setSearchTerm(value);
+
+    // Filter customers based on the search term
+    const filtered = customers.filter((customer) =>
+      customer.name.toLowerCase().includes(value) ||
+      customer.email.toLowerCase().includes(value) ||
+      customer.phone.includes(value) ||
+      customer.owner.toLowerCase().includes(value)
+    );
+    setFilteredCustomers(filtered);
+  };
+
+  // Handle cell edit
+  const handleEdit = (id, field, value) => {
+    const updatedCustomers = customers.map((customer) =>
+      customer.id === id ? { ...customer, [field]: value } : customer
+    );
+    setCustomers(updatedCustomers);
+    setFilteredCustomers(updatedCustomers); // Update filtered list as well
+  };
 
   return (
     <div className="contact">
       <header className="contact-header">
         <h1>Customer List</h1>
-        <p>Below is a list of all customers in the system.</p>
+        <input
+          type="text"
+          placeholder="Search contacts..."
+          value={searchTerm}
+          onChange={handleSearch}
+          className="search-bar"
+        />
       </header>
       <section className="contact-content">
         <table className="customer-table">
@@ -57,20 +91,68 @@ const Contact = () => {
             </tr>
           </thead>
           <tbody>
-            {customers.map((customer) => (
+            {filteredCustomers.map((customer) => (
               <tr key={customer.id}>
                 <td>{customer.id}</td>
-                <td>{customer.name}</td>
-                <td>{customer.email}</td>
-                <td>{customer.phone}</td>
-                <td>{customer.owner}</td>
-                <td>{customer.lastActivity}</td>
-                <td>{customer.createDate}</td>
-                <td>{customer.status}</td>
+                <td>
+                  <input
+                    type="text"
+                    value={customer.name}
+                    onChange={(e) => handleEdit(customer.id, 'name', e.target.value)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="email"
+                    value={customer.email}
+                    onChange={(e) => handleEdit(customer.id, 'email', e.target.value)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    value={customer.phone}
+                    onChange={(e) => handleEdit(customer.id, 'phone', e.target.value)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    value={customer.owner}
+                    onChange={(e) => handleEdit(customer.id, 'owner', e.target.value)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="date"
+                    value={customer.lastActivity}
+                    onChange={(e) => handleEdit(customer.id, 'lastActivity', e.target.value)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="date"
+                    value={customer.createDate}
+                    onChange={(e) => handleEdit(customer.id, 'createDate', e.target.value)}
+                  />
+                </td>
+                <td>
+                  <select
+                    value={customer.status}
+                    onChange={(e) => handleEdit(customer.id, 'status', e.target.value)}
+                  >
+                    <option value="Follow đặt hẹn">Follow đặt hẹn</option>
+                    <option value="Follow sau gặp">Follow sau gặp</option>
+                    <option value="Chốt">Chốt</option>
+                    <option value="Xịt">Xịt</option>
+                    <option value="Đã kết nối và xịt">Đã kết nối và xịt</option>
+                  </select>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
+        {filteredCustomers.length === 0 && <p>No contacts found.</p>}
       </section>
     </div>
   );

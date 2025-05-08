@@ -19,13 +19,13 @@ const Sidebar = () => {
             </NavLink>
           </li>
           <li>
-            <NavLink to="/sales" className={({ isActive }) => isActive ? 'active-link' : ''}>
-              Sales
+            <NavLink to="/tasks" className={({ isActive }) => isActive ? 'active-link' : ''}>
+              Tasks
             </NavLink>
           </li>
           <li>
-            <NavLink to="/support" className={({ isActive }) => isActive ? 'active-link' : ''}>
-              Support
+            <NavLink to="/deals" className={({ isActive }) => isActive ? 'active-link' : ''}>
+              Deals
             </NavLink>
           </li>
         </ul>

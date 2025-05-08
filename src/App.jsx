@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
 import MainLayout from './layouts/MainLayout';
 import Contact from './pages/Contact';
-import Sales from './pages/Sales';
-import Support from './pages/Support';
+import Tasks from './pages/Tasks';
+import Deals from './pages/Deals';
 
 
 function App() {
@@ -14,8 +14,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/sales" element={<Sales />} />
-          <Route path="/support" element={<Support />} />
+          <Route path="/tasks" element={<Tasks />} />
+          <Route path="/deals" element={<Deals />} />
         </Routes>
       </MainLayout>
     </Router>
