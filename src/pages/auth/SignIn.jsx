@@ -1,14 +1,18 @@
+// SignIn.jsx
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../../styles/Auth.scss';
 
 const SignIn = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSignIn = (e) => {
     e.preventDefault();
-    // Add authentication logic here
-    console.log('Sign In:', { email, password });
+    // Giả lập đăng nhập thành công
+    localStorage.setItem('token', 'fake-token');
+    navigate('/dashboard'); // điều hướng đến dashboard
   };
 
   return (
@@ -17,27 +21,15 @@ const SignIn = () => {
       <form onSubmit={handleSignIn}>
         <div className="form-group">
           <label>Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
         </div>
         <div className="form-group">
           <label>Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
         </div>
         <button type="submit" className="btn">Sign In</button>
       </form>
-      <p>
-        Don't have an account? <a href="/signup">Sign Up</a>
-      </p>
+      <p>Don't have an account? <a href="/signup">Sign Up</a></p>
     </div>
   );
 };
